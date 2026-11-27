@@ -54,6 +54,7 @@ engineering, AI, cybersecurity, and Forward Deployed Engineering.
 
 - `fundamentals/` — Python basics
 - `data_structures/` — Python data structures
+- `oop/` — Object-oriented programming
 - `problem_solving/` — Coding challenges
 - `projects/` — Practical applications
 - `notes/` — Learning notes and reflections
