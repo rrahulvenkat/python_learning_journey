@@ -313,12 +313,18 @@ class Incident:
     def techniques(self):
         return sorted({technique_of(a.rule, a)[0] for a in self.alerts})
 
+    @property
+    def hosts(self):
+        return sorted({e.host for a in self.alerts for e in a.evidence if e.host})
+
     def report(self):
+        who = ", ".join(sorted(self.entities)) or "no user or IP recorded"
         lines = [f"[{str(self.severity).upper()}] score {self.score} | "
-                 f"{self.start:%Y-%m-%d %H:%M}-{self.end:%H:%M} | "
-                 f"{', '.join(sorted(self.entities))}",
+                 f"{self.start:%Y-%m-%d %H:%M}-{self.end:%H:%M} | {who}",
                  f"  story:      {' -> '.join(self.tactics)}",
                  f"  techniques: {', '.join(self.techniques)}"]
+        if self.hosts:
+            lines.append(f"  hosts:      {', '.join(self.hosts)}")
         if self.sequences:
             lines.append(f"  sequence:   {'; '.join(self.sequences)}")
         for alert in self.alerts:
