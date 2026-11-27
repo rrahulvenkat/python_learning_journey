@@ -101,7 +101,11 @@ class Rule(ABC):
         return []
 
     def alert(self, event, summary, severity=None, evidence=()):
-        return Alert(event.time, self.name, severity or self.severity, summary, list(evidence))
+        # With no evidence given, keep the event that triggered the alert,
+        # so later steps (correlation.py) always know which user and IP
+        # it's about.
+        return Alert(event.time, self.name, severity or self.severity, summary,
+                     list(evidence) or [event])
 
 
 class BruteForceRule(Rule):
