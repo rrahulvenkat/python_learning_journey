@@ -1,15 +1,15 @@
 # Windows Event Logs: one more parser, and the rules that go with it
 #
 # Windows records security activity as numbered EVENTS in XML. This file
-# adds a WindowsEventParser (a LogParser subclass, inheritance.py) that
-# turns them into LogEvents (classes_and_objects.py), plus rules for the
+# adds a WindowsEventParser (a LogParser subclass, parsers.py) that
+# turns them into LogEvents (events.py), plus rules for the
 # Windows events attackers can't avoid creating.
 #
 # Because everything shares the LogEvent format, rules that already
 # exist work on Windows with NO changes: BruteForceRule catches RDP
 # brute force, NewSourceIPRule and the baseline rules work on Windows
 # logons, and the Correlator builds incidents across Windows and Linux.
-# That's the payoff of the whole OOP series.
+# That's the payoff of one shared event format.
 #
 # Topics covered here:
 #   1. What a Windows event looks like, and where to get them
@@ -39,11 +39,11 @@ import re
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
-import correlation
-from classes_and_objects import LogEvent
-from correlation import Correlator, all_rules
-from inheritance import LogParser, ParseError, detect_parser
-from polymorphism import DetectionEngine, Rule, Severity, Timeline
+from . import correlation
+from .correlation import Correlator, all_rules
+from .events import LogEvent
+from .parsers import LogParser, ParseError, detect_parser
+from .rules import DetectionEngine, Rule, Severity, Timeline
 
 
 # ---------------------------------------------------------------

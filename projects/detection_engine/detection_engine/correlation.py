@@ -35,9 +35,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
-from baseline_rules import LoginVolumeRule, UnusualHourRule, make_history
-from classes_and_objects import LogEvent
-from polymorphism import Alert, DetectionEngine, Rule, Severity, Timeline, default_rules
+from .baselines import LoginVolumeRule, UnusualHourRule, make_history
+from .events import LogEvent
+from .rules import Alert, DetectionEngine, Rule, Severity, Timeline, default_rules
 
 
 # ---------------------------------------------------------------
@@ -355,7 +355,7 @@ class Correlator:
 
 
 # ---------------------------------------------------------------
-# Demo data: three weeks of normal logins (baseline_rules.py) plus,
+# Demo data: three weeks of normal logins (baselines.py) plus,
 # on the last day, a cloud account takeover and a web scanner.
 # ---------------------------------------------------------------
 

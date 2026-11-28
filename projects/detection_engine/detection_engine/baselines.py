@@ -1,8 +1,7 @@
 # Baseline Rules: anomaly detection as plug-in rule classes
 #
-# fundamentals/statistics_and_baselines.py taught the statistics
-# (robust z-scores, per-entity baselines, active hours). polymorphism.py
-# built a detection engine that runs any Rule. This file joins them:
+# stats.py has the statistics (robust z-scores, active hours), and
+# rules.py a detection engine that runs any Rule. This file joins them:
 # two new Rule subclasses, and the engine runs them alongside the
 # signature rules WITHOUT CHANGING (the point of polymorphism).
 #
@@ -23,21 +22,12 @@
 
 
 import random
-import sys
 from collections import Counter, defaultdict, deque
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
-from classes_and_objects import LogEvent
-from polymorphism import DetectionEngine, Rule, Severity, Timeline, default_rules
-
-# Reuse the statistics from the fundamentals folder. Python only looks
-# for imports in this script's own folder (and installed packages), so
-# add the other folder to the search path. In a bigger project you'd
-# turn the repo into a PACKAGE (folders with __init__.py, installed
-# with `pip install -e .`) so imports work from anywhere without this.
-sys.path.append(str(Path(__file__).resolve().parent.parent / "fundamentals"))
-from statistics_and_baselines import active_hours, robust_z      # noqa: E402
+from .events import LogEvent
+from .rules import DetectionEngine, Rule, Severity, Timeline, default_rules
+from .stats import active_hours, robust_z
 
 
 class LoginVolumeRule(Rule):

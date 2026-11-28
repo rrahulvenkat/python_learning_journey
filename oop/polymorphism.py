@@ -102,8 +102,8 @@ class Rule(ABC):
 
     def alert(self, event, summary, severity=None, evidence=()):
         # With no evidence given, keep the event that triggered the alert,
-        # so later steps (correlation.py) always know which user and IP
-        # it's about.
+        # so later steps (linking alerts into incidents) always know which
+        # user and IP it's about.
         return Alert(event.time, self.name, severity or self.severity, summary,
                      list(evidence) or [event])
 
@@ -131,15 +131,18 @@ class BruteForceRule(Rule):
                 q.popleft()
             if len(q) >= self.threshold and ip not in self._flagged:
                 users = sorted({e.user for e in q if e.user})
+                # Some logs don't say which user was tried (a web login form)
+                tried = f" (users: {', '.join(users)})" if users else ""
                 self._flagged[ip] = self.alert(
                     event, f"{len(q)} failed logins from {ip} in "
-                           f"{(event.time - q[0].time).seconds}s (users: {', '.join(users)})",
+                           f"{(event.time - q[0].time).seconds}s{tried}",
                     evidence=list(q))
                 return [self._flagged[ip]]
         elif ip in self._flagged and ip not in self._breached:
             self._breached.add(ip)
-            return [self.alert(event, f"{ip} logged in as {event.user!r} after a brute-force "
-                                      f"attempt", Severity.CRITICAL, [event])]
+            who = f" as {event.user!r}" if event.user else ""
+            return [self.alert(event, f"{ip} logged in{who} after a brute-force attempt",
+                               Severity.CRITICAL, [event])]
         return []
 
 
