@@ -94,6 +94,26 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
   right before "fixing" the code; here the code had found something I'd
   missed.
 
+## Web vulnerabilities (`projects/web_vulns/`)
+
+### A backslash inside an f-string expression
+- **What went wrong:** `f"... {login_safe(db, \"admin'--\", ...)}"` was a
+  syntax error.
+- **Why:** before Python 3.12 the `{...}` part of an f-string can't
+  contain a backslash, so the escaped quotes were rejected.
+- **Lesson:** compute the awkward value into a variable on the line above,
+  then interpolate the plain name. Clearer anyway, and works on every
+  version.
+
+### The lesson's own "fix" had the next bug in it
+- **What I watched for:** the safe login fixes SQL injection but still
+  compares the password in plain text, which is exactly what
+  `projects/hash_cracker` warns against. Rather than hide that, the
+  practice exercise is to add hashing, so one project's fix doesn't
+  quietly teach another project's bug.
+- **Lesson:** fixing one vulnerability class can leave another in plain
+  sight. Name it, don't let the "after" code look flawless when it isn't.
+
 ---
 
 ## log-detection-engine: testing on real logs
