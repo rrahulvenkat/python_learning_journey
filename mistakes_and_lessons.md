@@ -9,6 +9,77 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
 
 ---
 
+## Advanced: decorators and context managers (`advanced/`)
+
+### An audit log that called failed logins "OK"
+- **What went wrong:** three wrong passwords were logged as `OK login`.
+  The `@audit_log` decorator only treated a raised exception as a
+  failure, and a wrong password doesn't raise: `login()` returns
+  `False`.
+- **Lesson:** decide what "failure" means for each thing you log. A
+  security log that records failed logins as successes is worse than no
+  log, because people trust it. A `False` result is now logged as
+  `FAILED`, and a test checks it.
+
+### Log lines printed out of order
+- **What went wrong:** in the lesson's output, all the audit lines came
+  first, before the text they belonged to.
+- **Why:** `logging` writes to stderr by default and `print` to stdout.
+  When the output is piped, the two are buffered separately, so they
+  don't interleave in the order they were written.
+- **Lesson:** when log lines and normal output must read together, send
+  them to the same stream (`logging.StreamHandler(sys.stdout)`). In real
+  tools, keeping logs on stderr is usually right: it keeps them out of
+  output that other programs read.
+
+## Advanced: concurrency, asyncio and pytest (`advanced/`)
+
+### A benchmark that proved the opposite of its point
+- **What went wrong:** the GIL demo showed processes (0.12 s) SLOWER than
+  threads (0.03 s), "proving" processes don't help with computing.
+- **Why:** the job (a 4-digit PIN, ~30 ms of work) was smaller than the
+  cost of starting worker processes (~100 ms).
+- **Lesson:** parallelism only pays when the work outweighs the setup.
+  With a 6-digit PIN (1,000,000 guesses): one thread 0.97 s, four threads
+  0.94 s, four processes 0.35 s. Size benchmarks so the effect you're
+  measuring is bigger than the overhead around it.
+
+### A demo that sometimes showed the opposite
+- **What went wrong:** the `asyncio.to_thread` demo counted 0 heartbeats
+  in one run and some in another.
+- **Why:** it ran CPU-heavy hashing in the thread, which fights the event
+  loop for the GIL, so the result depended on thread scheduling. And the
+  first version was so short it finished before the first heartbeat.
+- **Lesson:** `to_thread` is for code that WAITS; CPU work belongs in a
+  process pool. The demo now uses a blocking call, and shows both sides:
+  called directly, 0 heartbeats (the loop froze); with `to_thread`, 19.
+  A flaky demo is worse than none, so each lesson was run three times.
+
+### A server that crashed when a client hung up
+- **What went wrong:** the lesson's server printed a
+  `ConnectionResetError` traceback when the port check connected and
+  hung up at once.
+- **Lesson:** a network server must expect clients to vanish at any
+  moment (port scanners do exactly this). Catch `ConnectionResetError`
+  and `BrokenPipeError` around the conversation, and close in `finally`.
+
+### Exception order: TimeoutError is an OSError
+- **What went wrong:** `except OSError:` before `except TimeoutError:`
+  would treat every timeout as "closed" instead of "filtered".
+- **Why:** since Python 3.11, `asyncio.TimeoutError` is the built-in
+  `TimeoutError`, a subclass of `OSError`. Python uses the FIRST matching
+  `except`.
+- **Lesson:** order `except` clauses from most specific to most general.
+
+### An "expected failure" that was really correct behaviour
+- **What went wrong:** my first `xfail` example claimed the SSH parser
+  was "confused" by a username containing a second `from ... port`. But
+  taking the LAST address is right: sshd writes the real client last, and
+  that's the framing defence the lesson tests elsewhere.
+- **Lesson:** an xfail documents a real limitation, so check the claim as
+  carefully as any other. It now records a genuine one: `message repeated
+  5 times` is read as one attempt.
+
 ## Password analyzer (`projects/password_analyzer/`)
 
 ### Scoring "2024!" as five random characters

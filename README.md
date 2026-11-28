@@ -44,7 +44,24 @@ engineering, AI, cybersecurity, and Forward Deployed Engineering.
 - Time and space complexity
 - LeetCode practice
 
-### 5. Practical Projects (cybersecurity, in `projects/`)
+### 5. Advanced Python (in `advanced/`)
+
+The parts of the language the fundamentals only introduce, with security
+examples throughout:
+
+| Lesson | What it covers |
+|---|---|
+| [decorators_and_context_managers](advanced/decorators_and_context_managers.py) | Decorators with arguments and `functools.wraps`; access control, rate limiting and an audit log as decorators; `logging`; writing context managers (`__enter__`/`__exit__`, `@contextmanager`, `ExitStack`); `yield from` and a `tail -f` log follower |
+| [concurrency](advanced/concurrency.py) | Threads, race conditions and locks, thread pools, `queue.Queue`, the GIL, process pools: checking IPs against a slow API, and cracking a PIN on several CPU cores |
+| [asyncio_basics](advanced/asyncio_basics.py) | `async`/`await`, `gather`, timeouts, semaphores, a real local server and client, banner grabbing, and a port check that refuses anything but your own machine |
+| [testing_with_pytest](advanced/testing_with_pytest.py) | Virtual environments, `pytest` tests, `raises`, `parametrize`, fixtures, `tmp_path`/`monkeypatch`/`caplog`, mocking with `unittest.mock`, `skipif` and `xfail`: proving security properties with tests |
+
+The pytest lesson needs a package, so set up a virtual environment once:
+`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`, then
+`.venv/bin/pytest advanced/testing_with_pytest.py -v`. The other lessons
+use only the standard library: `python3 advanced/<lesson>.py`.
+
+### 6. Practical Projects (cybersecurity, in `projects/`)
 
 Small tools, each one runnable file with a lesson, a demo and tests
 (`python3 main.py`).
@@ -71,6 +88,7 @@ and an SSH brute-force detection series, starting with
 - `fundamentals/` — Python basics
 - `data_structures/` — Python data structures
 - `oop/` — Object-oriented programming
+- `advanced/` — Advanced Python: decorators, context managers, concurrency, asyncio, pytest
 - `problem_solving/` — Coding challenges
 - `projects/` — Small cybersecurity tools (see above)
 - `notes/` — Learning notes and reflections
