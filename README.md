@@ -58,6 +58,7 @@ Small tools, each one runnable file with a lesson, a demo and tests
 | [attack_paths](projects/attack_paths/) | Which machines an attacker can reach, the shortest path to the database, and the best link to cut | Graphs, BFS, reachability, choke points |
 | [web_vulns](projects/web_vulns/) | A deliberately vulnerable mini-app: SQL injection, XSS and path traversal, each exploited then fixed | Parameterised queries, output escaping, path containment; why data must stay data |
 | [totp_generator](projects/totp_generator/) | The six-digit 2FA codes in Google Authenticator, built from scratch and checked against the RFC test values | HMAC, base32, `struct`; clock drift, replays, rate limits; why passkeys beat TOTP against phishing |
+| [jwt_tampering](projects/jwt_tampering/) | Login tokens (JWTs) signed from scratch, then forged five ways against a vulnerable checker, and stopped by a safe one | base64url, HMAC; `alg: none`, weak keys, algorithm confusion, expiry; why the server must choose the algorithm |
 | [secrets_scanner](projects/secrets_scanner/) | Finds API keys and hardcoded passwords in files and in git history, like a small gitleaks | Regex rules, Shannon entropy, false positives, redaction, `subprocess` + `git log`; revoke before you delete |
 
 Bigger projects built from these lessons live in their own repos:

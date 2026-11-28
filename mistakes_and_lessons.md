@@ -135,6 +135,26 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
   your code against its own output only proves it's consistent, not that
   it's right.
 
+## JWT tampering (`projects/jwt_tampering/`)
+
+### A test that tried to do something meaningless
+- **What went wrong:** the last test revoked a token that had already
+  expired, and crashed: revoking first CHECKS the token, and an expired
+  token fails the check.
+- **Why:** the code was right; the test was. An expired token needs no
+  revoking, since expiry already ends it.
+- **Lesson:** when a test fails, ask whether the test describes something
+  sensible before changing the code. The rewritten test checks what I
+  actually meant: expiry ends every session, and the revocation list
+  forgets entries once they've expired, so it can't grow forever.
+
+### Using the projects on each other
+- **What went right:** the new file was checked with
+  `projects/secrets_scanner` before committing (no findings: every token
+  is made at runtime), and the HS256 code was checked against the
+  signature published in RFC 7515.
+- **Lesson:** small tools pay off when you use them on your own work.
+
 ## Secrets scanner (`projects/secrets_scanner/`)
 
 ### Entropy can't tell on short strings
