@@ -40,6 +40,37 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
 
 ---
 
+## Cipher cracker (`projects/cipher_cracker/`)
+
+### Statistical attacks need enough text
+- **What went wrong:** the Vigenère break recovered the key `memen` instead
+  of `lemon`, and the sample's own Index of Coincidence (0.052) didn't even
+  look like English (0.067).
+- **Why:** the sample was a short, repetitive sentence ("the quick brown
+  fox..."). Letter-frequency and IC attacks need a few hundred letters of
+  natural text to be reliable; 150 repetitive ones aren't enough.
+- **Lesson:** an attack built on statistics is only as good as its sample
+  size. Swapping in a longer natural passage (a paragraph of *Pride and
+  Prejudice*) made the IC 0.066 and every key break cleanly.
+
+### Passing a list where a string was expected
+- **What went wrong:** `guess_key_length` built columns as lists of letters
+  and handed them to `index_of_coincidence`, which did `text.lower()` and
+  crashed.
+- **Lesson:** decide whether a helper takes a string or a list and keep to
+  it; `"".join(column)` at the boundary is clearer than a function that
+  accepts both.
+
+## Hash cracker (`projects/hash_cracker/`)
+
+### Counting hashes instead of users
+- **What went wrong:** the demo said "3/4 cracked" when all four users were
+  cracked. Two users shared the password `123456`, so the dump had only 3
+  distinct hashes, and I counted hashes.
+- **Lesson:** that identical passwords collapse to one hash is the whole
+  point being shown, so the count has to be over users, not hashes. Count
+  the thing your sentence claims to count.
+
 ## File integrity checker (`projects/file_integrity_checker/`)
 
 ### A test that only ran on Unix
@@ -47,6 +78,21 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
   Windows.
 - **Lesson:** guard platform-specific calls (`hasattr(os, "geteuid")`), or
   say clearly that the code is Unix-only.
+
+## Attack paths (`projects/attack_paths/`)
+
+### The "obvious" cut that doesn't cut anything
+- **What went wrong:** I expected the best link to cut on `internet -> db`
+  to be `app -> db`, the edge next to the database. The code said
+  `web -> app` instead, and I assumed the code was wrong.
+- **Why:** the code was right. Cutting `app -> db` leaves `db` reachable
+  through a side door (`app -> fileserver -> backup -> db`), so it
+  achieves nothing. The real choke point is earlier.
+- **Lesson:** two things. In security, closing the obvious door rarely
+  helps if a side door is open: look at ALL paths, not the one you first
+  see. And when your code and your expectation disagree, check which is
+  right before "fixing" the code; here the code had found something I'd
+  missed.
 
 ---
 

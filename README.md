@@ -53,9 +53,9 @@ Small tools, each one runnable file with a lesson, a demo and tests
 |---|---|---|
 | [password_analyzer](projects/password_analyzer/) | Estimates how many guesses a password needs, the way crackers guess, and checks leaks with k-anonymity | Why length beats complexity; wordlists and mangling rules; `getpass`, `hashlib` |
 | [file_integrity_checker](projects/file_integrity_checker/) | Fingerprints a folder and reports added, deleted, moved and modified files, with a signed baseline | Hashing in chunks; timestomping; symlinks; HMAC; atomic writes; exit codes |
-| cipher cracker (next) | Caesar and Vigenère ciphers, and breaking them by letter frequency | `ord`/`chr`, `Counter`, brute force |
-| hash cracker (planned) | A dictionary attack on hashes you make yourself | Why salts and slow hashes matter |
-| attack paths (planned) | Which machines an attacker can reach, and the shortest path to the database | Graphs, BFS |
+| [cipher_cracker](projects/cipher_cracker/) | Caesar and Vigenère ciphers, then breaks them with no key using letter frequencies | `ord`/`chr`, `Counter`, chi-squared, Index of Coincidence |
+| [hash_cracker](projects/hash_cracker/) | A dictionary attack on hashes you make yourself, then the defences that beat it | Why salts and slow hashes (PBKDF2) matter |
+| [attack_paths](projects/attack_paths/) | Which machines an attacker can reach, the shortest path to the database, and the best link to cut | Graphs, BFS, reachability, choke points |
 
 Bigger projects built from these lessons live in their own repos:
 [log-detection-engine](https://github.com/rrahulvenkat/log-detection-engine)
