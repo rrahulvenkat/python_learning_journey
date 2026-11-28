@@ -56,7 +56,9 @@ engineering, AI, cybersecurity, and Forward Deployed Engineering.
 - `data_structures/` — Python data structures
 - `oop/` — Object-oriented programming
 - `problem_solving/` — Coding challenges
-- `projects/` — Practical applications
+- `projects/` — Practical applications. The detection engine I built from
+  the `oop/` lessons is now its own repo:
+  [log-detection-engine](https://github.com/rrahulvenkat/log-detection-engine)
 - `notes/` — Learning notes and reflections
 
 ## Progress
