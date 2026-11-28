@@ -135,6 +135,37 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
   your code against its own output only proves it's consistent, not that
   it's right.
 
+## Secrets scanner (`projects/secrets_scanner/`)
+
+### Entropy can't tell on short strings
+- **What went wrong:** the human password `Summer2024-prod!` was rated a
+  random machine-made key (3.6 bits per character).
+- **Why:** a string of length n can't score more than log2(n) bits per
+  character, so 16 characters top out at 4.0, and almost any 16 with few
+  repeats lands near that ceiling. The measurement just can't separate
+  "random" from "varied" at that length.
+- **Lesson:** know the limits of a metric before trusting a threshold.
+  "Random-looking" now needs 20+ characters and 4.0+ bits.
+
+### The scanner flagged itself
+- **What went wrong:** a test that scans the scanner's own file found 6
+  "secrets": example assignments in comments, test inputs, and a
+  dictionary key named `private_key`.
+- **Lesson:** run your tool on its own code (dogfooding). Code ABOUT
+  secrets is full of secret-shaped text. Anything meant to be found is
+  now assembled at runtime, so the source holds none, which also keeps
+  GitHub's push protection from blocking it.
+
+### The first real scan found two scanner bugs
+- **What went wrong:** scanning this whole repo flagged AWS's documented
+  example key (ending in `EXAMPLE`) and an f-string field,
+  `password = '{password}'`, as leaks.
+- **Lesson:** the same as with log-detection-engine: real input finds what
+  made-up tests don't. Both are fixed and tested. One false alarm is
+  left, on a `print` line, and is documented rather than patched with a
+  fragile special case: no scanner is perfect, and a person reviews the
+  MEDIUM findings.
+
 ---
 
 ## log-detection-engine: testing on real logs
