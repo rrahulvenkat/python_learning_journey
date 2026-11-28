@@ -114,6 +114,27 @@ Each entry: **what went wrong**, **why**, and **the lesson**.
 - **Lesson:** fixing one vulnerability class can leave another in plain
   sight. Name it, don't let the "after" code look flawless when it isn't.
 
+## TOTP generator (`projects/totp_generator/`)
+
+### A test that could never fail
+- **What went wrong:** one test was
+  `assert main(["verify", "000000"], ...) in (0, 1)`. The command returns
+  0 or 1 for every code, so the test passed whatever the code did.
+- **Why:** I didn't know whether `000000` happened to be a valid code at
+  that moment, so I accepted both answers instead of choosing an input
+  whose answer I DID know.
+- **Lesson:** a test that accepts every outcome tests nothing. Build an
+  input with a known answer (here: a code outside the 3 the window
+  accepts) and assert that exact answer.
+
+### Trusting known answers over my own reasoning
+- **What went right:** HOTP and TOTP were checked against the test values
+  printed in RFC 4226 and RFC 6238, not against codes my own code
+  produced. All 28 matched first time, across SHA-1, SHA-256 and SHA-512.
+- **Lesson:** when a standard publishes test vectors, use them. Testing
+  your code against its own output only proves it's consistent, not that
+  it's right.
+
 ---
 
 ## log-detection-engine: testing on real logs

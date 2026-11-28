@@ -57,6 +57,7 @@ Small tools, each one runnable file with a lesson, a demo and tests
 | [hash_cracker](projects/hash_cracker/) | A dictionary attack on hashes you make yourself, then the defences that beat it | Why salts and slow hashes (PBKDF2) matter |
 | [attack_paths](projects/attack_paths/) | Which machines an attacker can reach, the shortest path to the database, and the best link to cut | Graphs, BFS, reachability, choke points |
 | [web_vulns](projects/web_vulns/) | A deliberately vulnerable mini-app: SQL injection, XSS and path traversal, each exploited then fixed | Parameterised queries, output escaping, path containment; why data must stay data |
+| [totp_generator](projects/totp_generator/) | The six-digit 2FA codes in Google Authenticator, built from scratch and checked against the RFC test values | HMAC, base32, `struct`; clock drift, replays, rate limits; why passkeys beat TOTP against phishing |
 
 Bigger projects built from these lessons live in their own repos:
 [log-detection-engine](https://github.com/rrahulvenkat/log-detection-engine)
