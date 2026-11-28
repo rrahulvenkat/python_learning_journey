@@ -44,11 +44,23 @@ engineering, AI, cybersecurity, and Forward Deployed Engineering.
 - Time and space complexity
 - LeetCode practice
 
-### 5. Practical Projects
-- Password analyzer
-- Log analyzer
-- Security automation scripts
-- API-based applications
+### 5. Practical Projects (cybersecurity, in `projects/`)
+
+Small tools, each one runnable file with a lesson, a demo and tests
+(`python3 main.py`).
+
+| Project | What it does | What it teaches |
+|---|---|---|
+| [password_analyzer](projects/password_analyzer/) | Estimates how many guesses a password needs, the way crackers guess, and checks leaks with k-anonymity | Why length beats complexity; wordlists and mangling rules; `getpass`, `hashlib` |
+| [file_integrity_checker](projects/file_integrity_checker/) | Fingerprints a folder and reports added, deleted, moved and modified files, with a signed baseline | Hashing in chunks; timestomping; symlinks; HMAC; atomic writes; exit codes |
+| cipher cracker (next) | Caesar and Vigenère ciphers, and breaking them by letter frequency | `ord`/`chr`, `Counter`, brute force |
+| hash cracker (planned) | A dictionary attack on hashes you make yourself | Why salts and slow hashes matter |
+| attack paths (planned) | Which machines an attacker can reach, and the shortest path to the database | Graphs, BFS |
+
+Bigger projects built from these lessons live in their own repos:
+[log-detection-engine](https://github.com/rrahulvenkat/log-detection-engine)
+and an SSH brute-force detection series, starting with
+[ssh-log-analyzer](https://github.com/rrahulvenkat/ssh-log-analyzer).
 
 ## Repository Structure
 
@@ -56,10 +68,10 @@ engineering, AI, cybersecurity, and Forward Deployed Engineering.
 - `data_structures/` — Python data structures
 - `oop/` — Object-oriented programming
 - `problem_solving/` — Coding challenges
-- `projects/` — Practical applications. The detection engine I built from
-  the `oop/` lessons is now its own repo:
-  [log-detection-engine](https://github.com/rrahulvenkat/log-detection-engine)
+- `projects/` — Small cybersecurity tools (see above)
 - `notes/` — Learning notes and reflections
+- [`mistakes_and_lessons.md`](mistakes_and_lessons.md) — real mistakes from
+  building these, and what each one taught
 
 ## Progress
 
